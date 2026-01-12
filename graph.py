@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
-x = [1,2,3,4,5,6]
-y = [6,7,9,3,2,9]
-
-plt.plot (x,y,color ="green", marker = 'x')
+x = input('Enter the x-values separated by spaces: ');
+y = input('Enter the y-values separated also by spaces: ')
+x_values = list(map(int,x.split() ) )
+y_values = list(map(int,y.split() ) )
+plt.plot (x_values,y_values,color ="green", marker = 'x')
 plt.title("This is a simple graph")
 plt.xlabel("x values")
 plt.ylabel("Y values")
