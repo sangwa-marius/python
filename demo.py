@@ -1,40 +1,47 @@
 import json
-from datetime import datetime
+from datetime import datetime 
+from flask import Flask, jsonify, request
 
-FILE_NAME = "data.jsonl"
+app = Flask(__name__)
 
-def save_message(name, text):
-    message = {
-        "sender": name,
-        "text": text,
-        "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+File = "data.jsonl"
+
+@app.route("/send", methods =['POST'])
+def send_message():
+    data = request.json
+    message ={
+        "sender":data.get('name'),
+        "text":data.get('text'),
+        "time":datetime.now().strftime("%Y-%m-%d %H:%Mz:%S")  
     }
-
-    with open(FILE_NAME, "a") as f:
-        f.write(json.dumps(message) + "\n")
-
-
-def display_messages():
+    
+    with open(File ,"a") as f:
+        f.write(json.dumps(message)+"\n")
+    
+    return jsonify({
+        "success":True,
+        "message":message
+    })
+    
+    
+@app.route("/get_messages", methods=['GET'])  
+def get_all_messages():
+    messages =[]
+    
     try:
-        with open(FILE_NAME, "r") as file:
-            for line in file:
+        with open(File, "r")as f:
+            for line in f:
                 try:
-                    msg = json.loads(line)
-                    sender = msg.get("sender", "Unknown")
-                    text = msg.get("text", "")
-                    time = msg.get("time", "No time")
-
-                    print(f"{sender} ({time}): {text}")
-                except json.JSONDecodeError:
-                    print("Skipping invalid line...")
+                    messages.append(json.loads(line))  
+                except:
+                    pass
     except FileNotFoundError:
-        print("No messages yet.")
+        pass   
+    
+    return jsonify(messages)                 
+        
+        
+        
 
-
-name = input("Enter your name: ")
-text = input("Enter your message: ")
-
-save_message(name, text)
-
-print("\n--- All Messages ---")
-display_messages()
+if __name__ =="__main__"   :
+    app.run(debug=True)     
