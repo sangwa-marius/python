@@ -9,11 +9,10 @@ def home():
 
 @app.route("/data")
 def get_data():
-    return jsonify({
-        "name": "Marius",
-        "age": 30,
-        "city": "Kigali"
-    })
+    with open("data.jsonl","r") as f:
+        data = f.read()
+        return data
+    
     
     
 @app.route("/data/user/<name>")  
