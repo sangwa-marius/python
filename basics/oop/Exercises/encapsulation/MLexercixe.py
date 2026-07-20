@@ -10,7 +10,7 @@ class Dataset:
     
     @samples.setter
     def samples(self, samples):
-        if (samples > 0):
+        if (samples >= 0):
             self.__samples = samples
         else:
             raise ValueError("Samples should be greater than 0")
